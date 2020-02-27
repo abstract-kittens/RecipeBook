@@ -10,7 +10,13 @@ from alice_sdk import AliceRequest, AliceResponse
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
+
+from flask_ngrok import run_with_ngrok
+
+from handle_dialog import handle_dialog
+
 app = Flask(__name__)
+run_with_ngrok(app)
 
 
 logging.basicConfig(level=logging.DEBUG)
