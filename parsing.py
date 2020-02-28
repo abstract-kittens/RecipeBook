@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 
@@ -59,6 +62,7 @@ def parser_step(s):
             temp += s[i] + " "
             #print(temp)
     rez.append(temp.rstrip())
+    return rez
 #    print(rez)
         
         
