@@ -24,7 +24,6 @@ logging.basicConfig(level=logging.DEBUG)
 # Хранилище данных о сессиях.
 session_storage = {}
 
-
 # Задаем параметры приложения Flask.
 @app.route("/", methods=['POST'])
 def main():
@@ -34,12 +33,11 @@ def main():
 
     alice_response = AliceResponse(alice_request)
 
-    user_id = alice_request.user_id
-
+    user_id = alice_request.user_id      
+    
     alice_response, session_storage[user_id] = handle_dialog(
-        alice_request, alice_response, session_storage.get(user_id)
+        alice_request, alice_response, session_storage.get(user_id) 
     )
-
     logging.info('Response: {}'.format(alice_response))
 
     return alice_response.dumps()
