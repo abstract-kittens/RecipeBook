@@ -59,6 +59,7 @@ def parser_step(s):
             temp += s[i] + " "
             #print(temp)
     rez.append(temp.rstrip())
+    return rez
 #    print(rez)
         
         
