@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 

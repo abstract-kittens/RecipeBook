@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-from db_api import *
-#from parser import *
-import pymorphy2
-morph = pymorphy2.MorphAnalyzer()
+
+import parsing
+import db_api
 
 #s = """фелиное куре 500 грамм масло 120 грамм помидор 1 штука 
 #        соль по вкусу жопа гнома 2 киллограмма"""
@@ -79,7 +78,7 @@ def add_recipe(request, response, user_storage, db):
         user_storage["add recipe"] = 2
         return response, user_storage
     elif user_storage["add recipe"] == 2:
-        user_storage["ingredients"] = user_storage["ingredients"] + parser_ingred(request.command.lower())
+        user_storage["ingredients"] = user_storage["ingredients"] + parsing.parser_ingred(request.command.lower())
         #k = add_recipe(db, request.user_id, request.command)
         response.set_text("Хотите добавить еще ингредиенты? (да/нет)")
         user_storage["add recipe"] = 3
@@ -97,12 +96,12 @@ def add_recipe(request, response, user_storage, db):
             user_storage["add recipe"] = 5
             response.set_text = response.set_text("Назови шаги в формате Шаг 1 [описание шага] Шаг 2 [описание шага]")
         elif request.command.lower() == "нет":
-            add_db(db, request.user_id, user_storage["name"], user_storage["ingredients"], user_storage["steps"])
+            db_api.add_db(db, request.user_id, user_storage["name"], user_storage["ingredients"], user_storage["steps"])
             user_storage = {"add recipe" : 0, "get recipe" : 0}
             response.set_text = response.set_text("Спасибо, рецепт добавлен!")
         return response, user_storage
     elif user_storage["add recipe"] == 5:
-        user_storage["steps"] = user_storage["steps"] + parser_step(request.command.lower())
+        user_storage["steps"] = user_storage["steps"] + parsing.parser_step(request.command.lower())
         response.set_text = response.set_text("Хотите назвать шаги приготовления?")
         user_storage["add recipe"] = 4
         return response, user_storage
