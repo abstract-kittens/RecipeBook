@@ -7,7 +7,7 @@ from add_recipe import *
 def handle_dialog(request, response, user_storage, db):
     if request.is_new_session:
         user_storage = {"add recipe" : 0, "get recipe" : 0,
-                        "delete recipe" : 0,
+                        "delete recipe" : 0, "edit recipe" : 0,
                         "name" : None, "ingredients":None,
                         "steps" : None}
         response.set_text("Выберите действие")
@@ -35,6 +35,10 @@ def handle_dialog(request, response, user_storage, db):
             delete_db(db, request.user_id, request.command.lower())
             response.set_text("Рецепт успешно удален")
             return response, user_storage
+        elif request.command.lower() == "измени рецепт":
+             user_storage["get recipe"] = 3
+             response.set_text("Скажите название рецепта, который хотите воспроизвести")
+             return response, user_storage
         else:
             response.set_text("Неизвестное действие, выберите то, что есть")
             response.set_buttons([
