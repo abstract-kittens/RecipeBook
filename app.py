@@ -15,6 +15,8 @@ from flask_ngrok import run_with_ngrok
 
 from handle_dialog import handle_dialog
 
+from pymongo import MongoClient
+
 app = Flask(__name__)
 run_with_ngrok(app)
 
@@ -28,6 +30,9 @@ session_storage = {}
 @app.route("/", methods=['POST'])
 def main():
     # Функция получает тело запроса и возвращает ответ.
+    client = MongoClient('localhost', 27017)
+    db = client.db
+    
     alice_request = AliceRequest(request.json)
     logging.info('Request: {}'.format(alice_request))
 
@@ -36,7 +41,7 @@ def main():
     user_id = alice_request.user_id      
     
     alice_response, session_storage[user_id] = handle_dialog(
-        alice_request, alice_response, session_storage.get(user_id) 
+        alice_request, alice_response, session_storage.get(user_id), db
     )
     logging.info('Response: {}'.format(alice_response))
 

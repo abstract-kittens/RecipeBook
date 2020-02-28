@@ -41,7 +41,7 @@ def parser_ingred(s):
     return rez
     #print(rez)
 
-s = "шаг 1 возьмите гнома шаг 2 отрежте гному жопу шаг 3 повторите шаг 1 и добавьте больше жоп в блюдо" 
+#s = "шаг 1 возьмите гнома шаг 2 отрежте гному жопу шаг 3 повторите шаг 1 и добавьте больше жоп в блюдо" 
 def parser_step(s):
     rez = []
     number = 1
@@ -54,17 +54,16 @@ def parser_step(s):
                 rez.append(temp.rstrip())
             temp = "Шаг "
 #            print(temp, number)
-            number += 1
-            
+            number += 1  
         else:
             temp += s[i] + " "
             #print(temp)
     rez.append(temp.rstrip())
-    print(rez)
+#    print(rez)
         
         
     
     
-parser_step(s)    
+#parser_step(s)    
 #parser(s)
         
