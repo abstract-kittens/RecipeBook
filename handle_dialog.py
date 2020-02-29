@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 from add_recipe import *
+from edit_recipe import *
 
 def handle_dialog(request, response, user_storage, db):
     if request.is_new_session:
@@ -19,7 +20,15 @@ def handle_dialog(request, response, user_storage, db):
                     ])
         return response, user_storage
     else:
-        if request.command.lower() == "добавь рецепт":
+        if request.command.lower() == "выйти":
+            response.set_text("Спасибо за визит!")
+            response.set_end_session(True)
+            user_storage = {"add recipe" : 0, "get recipe" : 0,
+                        "delete recipe" : 0, "edit recipe" : 0,
+                        "name" : None, "ingredients":None,
+                        "steps" : None}
+            return response, user_storage
+        elif request.command.lower() == "добавь рецепт":
             user_storage["add recipe"] = 1
             response.set_text("Скажите название рецепта")
             return response, user_storage
@@ -36,9 +45,12 @@ def handle_dialog(request, response, user_storage, db):
             response.set_text("Рецепт успешно удален")
             return response, user_storage
         elif request.command.lower() == "измени рецепт":
-             user_storage["get recipe"] = 3
-             response.set_text("Скажите название рецепта, который хотите воспроизвести")
+             user_storage["edit recipe"] = 1
+             response.set_text("Скажите название рецепта, который хотите изменить")
              return response, user_storage
+        elif user_storage["edit recipe"] > 0:
+            response, user_storage = edit_recipe(request, response, user_storage, db)
+            return response, user_storage
         else:
             response.set_text("Неизвестное действие, выберите то, что есть")
             response.set_buttons([
@@ -47,17 +59,3 @@ def handle_dialog(request, response, user_storage, db):
                     {'title':'Измени рецепт', 'hide':True},
                     {'title':'Удали рецепт', 'hide':True}])
             return response, user_storage
-'''            response.set_text("До встречи!")
-            response.set_end_session(True)
-            user_storage = {}
-            return response, user_storage
-        return response, user_storage'''
-'''        elif request.command.lower() == "покажи в бд":
-            user_storage[1] = 1
-            response.set_text("Ок!")
-            return response, user_storage
-        elif user_storage[1] == 1:
-            user_storage[1] = 0
-            doc = get_recipe(db, request.user_id, request.command)
-            response.set_text(doc["name"])
-            return response, user_storage'''

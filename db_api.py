@@ -27,3 +27,15 @@ def delete_db(db, user_id, name):
             "user_id":user_id,
             "name":name
     })
+        
+def update_name_db(db, user_id, name_old, name_new):
+    db["recipes"].update_one({"user_id":user_id, "name":name_old},
+                              {"$set":{"name":name_new}})
+    
+def update_steps_db(db, user_id, name, steps):
+    db["recipes"].update_one({"user_id":user_id, "name":name},
+                              {"$set":{"steps":steps}})
+    
+def update_ingredients_db(db, user_id, name, ingredients):
+    db["recipes"].update_one({"user_id":user_id, "name":name},
+                              {"$set":{"ingredients":ingredients}})
