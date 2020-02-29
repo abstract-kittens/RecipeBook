@@ -30,7 +30,6 @@ def add_recipe(request, response, user_storage, db):
         return response, user_storage
     
     elif user_storage["add recipe"] == 2:
-        print(parsing.parser_ingred(request.command.lower()))
         if user_storage["ingredients"]:
             user_storage["ingredients"] = (user_storage["ingredients"] +
                             parsing.parser_ingred(request.command.lower()))
@@ -48,6 +47,9 @@ def add_recipe(request, response, user_storage, db):
         elif request.command.lower() == "нет":
             user_storage["add recipe"] = 4
             response.set_text = response.set_text("Хотите назвать шаги приготовления?")
+        else:
+            user_storage["edit recipe"] = 3
+            response.set_text("Неизвестная команда. Хотите повторить ввод?")
         return response, user_storage
     
     elif user_storage["add recipe"] == 4:
@@ -63,6 +65,9 @@ def add_recipe(request, response, user_storage, db):
                         "name" : None, "ingredients":None,
                         "steps" : None}
             response.set_text = response.set_text("Спасибо, рецепт добавлен!")
+        else:
+            user_storage["edit recipe"] = 4
+            response.set_text("Неизвестная команда. Хотите повторить ввод?")
         return response, user_storage
     
     elif user_storage["add recipe"] == 5:

@@ -112,8 +112,8 @@ def edit_recipe(request, response, user_storage, db):
             response.set_text("Какой ингредиент " + request.command.lower() + "?")
             user_storage["edit recipe"] = 10
         elif request.command.lower() == "добавить":
-            user_storage["edit recipe"] = 11
-            response.set_text("Какой ингредиент " + request.command.lower() + "?")
+            user_storage["edit recipe"] = 12
+            response.set_text("Продиктуйте игредиенты в формате [название ингредиента] [количество] [мера]")
         else:
             user_storage["edit recipe"] = 100
             response.set_text("Неизвестная команда. Хотите повторить ввод?")
@@ -126,14 +126,9 @@ def edit_recipe(request, response, user_storage, db):
             response.set_text("Такого ингредиента нет. Хотите повторить ввод?")
         else:
             del user_storage["ingredients"][step]
-            update_steps_db(db, request.user_id, user_storage["name"], user_storage["steps"])
+            update_ingredients_db(db, request.user_id, user_storage["name"], user_storage["ingredients"])
             user_storage["edit recipe"] = 100
             response.set_text("Удалено. Хотите изменить что-то еще в этом рецепте?")
-        return response, user_storage
- 
-    elif user_storage["edit recipe"] == 11:
-        response.set_text("Продиктуйте игредиенты в формате [название ингредиента] [количество] [мера]")
-        user_storage["edit recipe"] = 12
         return response, user_storage
         
     elif user_storage["edit recipe"] == 12:
