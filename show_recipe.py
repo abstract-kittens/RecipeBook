@@ -55,3 +55,14 @@ def show_recipe(request, response, user_storage, db):
                           или шаги приготовления?""")
             user_storage ["get recipe"] = 2
             return response, user_storage
+        else: 
+            response.set_text("""Я вас не поняла""")
+            return response, user_storage
+    elif request.command.lower() == "":
+        user_storage = {"add recipe" : 0, "get recipe" : 0,
+                        "delete recipe" : 0, "edit recipe" : 0,
+                        "calculator" : 1,"ingredients":None,
+                        "steps" : None}
+    else: 
+        response.set_text("Я вас не поняла")
+        return response, user_storage
