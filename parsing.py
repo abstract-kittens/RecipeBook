@@ -4,8 +4,13 @@
 import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 
-#s = """фелиное куре 500 грамм масло 120 грамм помидор 1 штука 
-#        соль по вкусу жопа гнома 2 киллограмма"""
+#s = """куриное филе 500 грамм жопы единорогов 8 штук помидор 1 штука молоко 200 миллилитров
+#        сахар 2 чайных ложки соль и перец по вкусу корица 1 столовая ложка"""
+def morphy(item):
+    forms = morph.parse(item)
+    forms = forms[0].normal_form
+    return forms
+
 def parser_ingred(s):
     names = []
     mass = []
@@ -24,16 +29,22 @@ def parser_ingred(s):
             name = ""
             
         else:
-            name += item + " "            
+            if(morphy(item) != "ложка"):
+                name += item + " "        
+                
             if(lastitem.isnumeric() == True):
-                forms = morph.parse(item)
-                mer.append(forms[0].normal_form)
+                if (morphy(item) == "чайный"):
+                    item = "чайная ложка"
+                elif (morphy(item) == "столовый"):
+                    item = "столовая ложка"
+                mer.append(morphy(item))
                 name=""
                 
             elif(lastitem == "по" and item == "вкусу"):
                 mass.append('0')
                 merName = lastitem + " " + item
                 mer.append(merName)
+                names.append(name.replace('по вкусу', '').rstrip())
                 name=""
                 merName="" 
         lastitem = item 
@@ -42,7 +53,7 @@ def parser_ingred(s):
         rez.append([names[i], mass[i], mer[i]])
         i += 1
     return rez
-    #print(rez)
+#    print(rez)
 
 #s = "шаг 1 возьмите гнома шаг 2 отрежте гному жопу шаг 3 повторите шаг 1 и добавьте больше жоп в блюдо" 
 def parser_step(s):
@@ -55,9 +66,10 @@ def parser_step(s):
         if(s[i] == "шаг" and s[i+1] == str(number)):
             if(temp != ''):
                 rez.append(temp.rstrip())
-            temp = "Шаг "
+            temp = ""
 #            print(temp, number)
-            number += 1  
+        elif (s[i-1] == "шаг" and s[i] == str(number)):
+            number += 1 
         else:
             temp += s[i] + " "
             #print(temp)
@@ -69,5 +81,5 @@ def parser_step(s):
     
     
 #parser_step(s)    
-#parser(s)
+#parser_ingred(s)
         

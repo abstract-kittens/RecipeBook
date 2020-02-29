@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 from add_recipe import *
 from edit_recipe import *
+from show_recipe import *
 
 def handle_dialog(request, response, user_storage, db):
     if request.is_new_session:
@@ -35,6 +36,7 @@ def handle_dialog(request, response, user_storage, db):
         elif user_storage["add recipe"] > 0:
             response, user_storage = add_recipe(request, response, user_storage, db)
             return response, user_storage
+        
         elif request.command.lower() == "удали рецепт":
             user_storage["delete recipe"] = 1
             response.set_text("Скажите название рецепта для удаления")
@@ -50,7 +52,21 @@ def handle_dialog(request, response, user_storage, db):
              return response, user_storage
         elif user_storage["edit recipe"] > 0:
             response, user_storage = edit_recipe(request, response, user_storage, db)
+            
+        elif request.command.lower() == "покажи рецепт":
+             user_storage["get recipe"] = 1
+             response.set_text("Скажите название рецепта, который хотите воспроизвести")
+             return response, user_storage
+         
+        elif user_storage["get recipe"] > 0:
+             response, user_storage = show_recipe(request, response, user_storage, db)
+             return response, user_storage
+         
+        elif request.command.lower() == "помощь":
+            response.set_text("""я могу добавить новый рецепт, удалить существующий,
+                              изменить ингредиенты или воспроизвести один из ваших рецептов""")
             return response, user_storage
+        
         else:
             response.set_text("Неизвестное действие, выберите то, что есть")
             response.set_buttons([

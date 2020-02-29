@@ -59,9 +59,9 @@ def add_recipe(request, response, user_storage, db):
             db_api.add_db(db, request.user_id, user_storage["name"],
                           user_storage["ingredients"], user_storage["steps"])
             user_storage = {"add recipe" : 0, "get recipe" : 0,
-            "delete recipe" : 0, "edit recipe" : 0,
-            "name" : None, "ingredients":None,
-            "steps" : None}
+                        "delete recipe" : 0, "edit recipe" : 0,
+                        "name" : None, "ingredients":None,
+                        "steps" : None}
             response.set_text = response.set_text("Спасибо, рецепт добавлен!")
         return response, user_storage
     
@@ -70,6 +70,6 @@ def add_recipe(request, response, user_storage, db):
             user_storage["steps"] = user_storage["steps"] + parsing.parser_step(request.command.lower())
         else:
             user_storage["steps"] = parsing.parser_step(request.command.lower())
-        response.set_text = response.set_text("Хотите назвать шаги приготовления?")
+        response.set_text = response.set_text("Хотите добавить еще шаги приготовления?")
         user_storage["add recipe"] = 4
         return response, user_storage
