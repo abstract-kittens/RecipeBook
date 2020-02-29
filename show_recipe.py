@@ -6,6 +6,7 @@ def show_recipe(request, response, user_storage, db):
         response.set_text("Хорошо, запускаю отмену...")
         user_storage = {"add recipe" : 0, "get recipe" : 0,
                         "delete recipe" : 0, "edit recipe" : 0,
+                        "calculator" : 0,
                         "name" : None, "ingredients":None,
                         "steps" : None}
         return response, user_storage

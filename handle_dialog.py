@@ -5,11 +5,13 @@ from __future__ import unicode_literals
 from add_recipe import *
 from edit_recipe import *
 from show_recipe import *
+from calculator import *
 
 def handle_dialog(request, response, user_storage, db):
     if request.is_new_session:
         user_storage = {"add recipe" : 0, "get recipe" : 0,
                         "delete recipe" : 0, "edit recipe" : 0,
+                        "calculator" : 0,
                         "name" : None, "ingredients":None,
                         "steps" : None}
         response.set_text("Выберите действие")
@@ -65,6 +67,14 @@ def handle_dialog(request, response, user_storage, db):
         elif request.command.lower() == "помощь":
             response.set_text("""я могу добавить новый рецепт, удалить существующий,
                               изменить ингредиенты или воспроизвести один из ваших рецептов""")
+            return response, user_storage
+        
+        elif request.command.lower() == "пересчитай рецепт":
+            user_storage["calculator"] = 1
+            response.set_text("""Какой рецепт вы хотите пересчитать?""")
+            return response, user_storage
+        elif user_storage["calculator"] > 0:
+            response, user_storage = calculat(request, response, user_storage, db)
             return response, user_storage
         
         else:
