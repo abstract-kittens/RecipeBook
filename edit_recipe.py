@@ -63,7 +63,10 @@ def edit_recipe(request, response, user_storage, db):
         return response, user_storage
     
     elif user_storage["edit recipe"] == 5:
-        step = int(request.command.lower())
+        if request.command.lower().isnumeric():
+            step = int(request.command.lower())
+        else:
+            step = -1
         if step > len(user_storage["steps"]) or 0 > step:
             user_storage["edit recipe"] = 8
             response.set_text("Номер невалидный. Хотите повторить ввод номера шага?")
@@ -75,7 +78,10 @@ def edit_recipe(request, response, user_storage, db):
         return response, user_storage
        
     elif user_storage["edit recipe"] == 6:
-        user_storage["step"] = int(request.command.lower()) - 1
+        if request.command.lower().isnumeric():
+            step = int(request.command.lower()) - 1
+        else:
+            step = -1
         if user_storage["step"] >= len(user_storage["steps"]):
             user_storage["step"] = len(user_storage["steps"]) - 1
         response.set_text("Продиктуйте шаг")
