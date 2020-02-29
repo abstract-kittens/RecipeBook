@@ -17,13 +17,12 @@ def edit_recipe(request, response, user_storage, db):
         return response, user_storage
     
     elif user_storage["edit recipe"] == 1:
-        
         user_storage["edit recipe"] = 2
-        user_storage["name"] = request.command.lower()
-        doc = get_db(db, request.user_id, user_storage["name"])
-        if doc:   
+        doc = get_db(db, request.user_id, request.command.lower())
+        if doc != None:
             user_storage["ingredients"] = doc["ingredients"]
             user_storage["steps"] = doc["steps"]
+            user_storage["name"] = request.command.lower()
             response.set_text("Что вы хотите изменить? (название/ингредиенты/шаги)")
         else:
             response.set_text("Такого рецепта нет. Изменение не может быть выполнено")
