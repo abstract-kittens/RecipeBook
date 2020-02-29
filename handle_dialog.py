@@ -54,7 +54,7 @@ def handle_dialog(request, response, user_storage, db):
              return response, user_storage
         elif user_storage["edit recipe"] > 0:
             response, user_storage = edit_recipe(request, response, user_storage, db)
-            
+            return  response, user_storage
         elif request.command.lower() == "покажи рецепт":
              user_storage["get recipe"] = 1
              response.set_text("Скажите название рецепта, который хотите воспроизвести")
@@ -64,9 +64,15 @@ def handle_dialog(request, response, user_storage, db):
              response, user_storage = show_recipe(request, response, user_storage, db)
              return response, user_storage
          
-        elif request.command.lower() == "помощь":
-            response.set_text("""я могу добавить новый рецепт, удалить существующий,
-                              изменить ингредиенты или воспроизвести один из ваших рецептов""")
+        elif request.command.lower() == "помощь" or request.command.lower() == "что ты умеешь":
+            response.set_text("""
+                С моей помощью ты можешь сохранять свои рецепты, изменять их, удалять при необходимости
+                Команды для работы со мной:
+                    1) Добавь рецепт - открывает добавление рецепта
+                    2) Измени рецепт - можно изменить название, добавить/удалить ингредиенты, добавить/удалить шаги рецепта
+                    3) Покажи рецепт - можно получить ингредиенты и шаги
+                    4) Выйти - для выхода из навыка
+            """)
             return response, user_storage
         
         elif request.command.lower() == "пересчитай рецепт":
