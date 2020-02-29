@@ -30,8 +30,10 @@ session_storage = {}
 @app.route("/", methods=['POST'])
 def main():
     # Функция получает тело запроса и возвращает ответ.
-    client = MongoClient('localhost', 27017)
-    db = client.db
+#    client = MongoClient('localhost', 27017)
+    client = MongoClient('mongodb://admin:adminadmin1@ds241298.mlab.com:41298/heroku_t04mh511?retryWrites=false')
+#    db = client.db
+    db = client['heroku_t04mh511']
     
     alice_request = AliceRequest(request.json)
     logging.info('Request: {}'.format(alice_request))

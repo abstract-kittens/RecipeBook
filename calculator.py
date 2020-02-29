@@ -4,8 +4,12 @@
 import db_api
 
 def calculat(request, response, user_storage, db):
-    if request.command.lower() == "отменить":
-        response.set_text("Хорошо, запускаю отмену...")
+    if request.command.lower() in [
+            "отменить",
+            'отмена',
+            'назад'
+            ]:
+        response.set_text("Вы можете открыть другой рецепт")
         user_storage = {"add recipe" : 0, "get recipe" : 0,
                         "delete recipe" : 0, "edit recipe" : 0,
                         "calculator" : 0,
@@ -33,6 +37,9 @@ def calculat(request, response, user_storage, db):
             response.set_text("""На сколько процентов уменьшить рецепт? Укажите только число""")
             user_storage["calculator"] = 4
             return response, user_storage
+        else: 
+                response.set_text("Я вас не поняла")
+                return response, user_storage
         
     elif user_storage["calculator"] == 3:
         if request.command.isnumeric() == True:
@@ -71,13 +78,17 @@ def calculat(request, response, user_storage, db):
             response.set_text("Как вам пересчитать рецепт?")
             return response, user_storage
         elif request.command.lower() == "нет":
-            response.set_text("Хорошо, запускаю отмену...")
+            response.set_text("Вы можете открыть другой рецепт")
             user_storage = {"add recipe" : 0, "get recipe" : 0,
                             "delete recipe" : 0, "edit recipe" : 0,
                             "calculator" : 0,
                             "name" : None, "ingredients":None,
                             "steps" : None}
             return response, user_storage
-            
-            
+        else: 
+            response.set_text("Я вас не поняла")
+            return response, user_storage
+    else: 
+        response.set_text("Я вас не поняла")
+        return response, user_storage     
             

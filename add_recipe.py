@@ -7,12 +7,23 @@ import parsing
 import db_api
 
 def add_recipe(request, response, user_storage, db):
-    if request.command.lower() == "отменить":
-        response.set_text("Хорошо, запускаю отмену...")
+    if request.command.lower() in [
+            "отменить",
+            'отмена',
+            'назад'
+            ]:
+        response.set_text("Можете выбрать другое действие над рецептом, либо прослушать помощь")
         user_storage = {"add recipe" : 0, "get recipe" : 0,
                         "delete recipe" : 0, "edit recipe" : 0,
                         "name" : None, "ingredients":None,
                         "steps" : None}
+        response.set_buttons([
+                    {'title':'Добавь рецепт', 'hide':True},
+                    {'title':'Покажи рецепт', 'hide':True},
+                    {'title':'Измени рецепт', 'hide':True},
+                    {'title':'Пересчитай рецепт', 'hide':True},
+                    {'title':'Удали рецепт', 'hide':True}
+                    ])
         return response, user_storage
     
     elif user_storage["add recipe"] == 1:

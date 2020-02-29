@@ -19,6 +19,7 @@ def handle_dialog(request, response, user_storage, db):
                     {'title':'Добавь рецепт', 'hide':True},
                     {'title':'Покажи рецепт', 'hide':True},
                     {'title':'Измени рецепт', 'hide':True},
+                    {'title':'Пересчитай рецепт', 'hide':True},
                     {'title':'Удали рецепт', 'hide':True}
                     ])
         return response, user_storage
@@ -31,7 +32,10 @@ def handle_dialog(request, response, user_storage, db):
                         "name" : None, "ingredients":None,
                         "steps" : None}
             return response, user_storage
-        elif request.command.lower() == "добавь рецепт":
+        elif request.command.lower() in [
+                "добавь рецепт",
+                'запиши рецепт',
+                ]:
             user_storage["add recipe"] = 1
             response.set_text("Скажите название рецепта")
             return response, user_storage
@@ -48,14 +52,25 @@ def handle_dialog(request, response, user_storage, db):
             delete_db(db, request.user_id, request.command.lower())
             response.set_text("Рецепт успешно удален")
             return response, user_storage
-        elif request.command.lower() == "измени рецепт":
+        elif request.command.lower() in ["измени рецепт",
+                                  'исправь рецепт',
+                                  'обнови рецепт',
+                                  'обнови',
+                                  'исправь',
+                                  ]:
              user_storage["edit recipe"] = 1
              response.set_text("Скажите название рецепта, который хотите изменить")
              return response, user_storage
         elif user_storage["edit recipe"] > 0:
             response, user_storage = edit_recipe(request, response, user_storage, db)
             return  response, user_storage
-        elif request.command.lower() == "покажи рецепт":
+        elif request.command.lower() in [
+                "покажи рецепт",
+                'воспроизведи рецепт',
+                'открой рецепт',
+                'открой',
+                'покажи',
+                ]:
              user_storage["get recipe"] = 1
              response.set_text("Скажите название рецепта, который хотите воспроизвести")
              return response, user_storage
@@ -83,11 +98,21 @@ def handle_dialog(request, response, user_storage, db):
             response, user_storage = calculat(request, response, user_storage, db)
             return response, user_storage
         
+        elif request.command.lower() in [
+                'список рецептов',
+                'какие есть рецепты',
+                'все рецепты',
+                'покажи все мои рецепты',
+                'покажи все рецепты',
+                ]:
+            response.set_text("""Какой рецепт вы хотите пересчитать?""")
+            return response, user_storage
         else:
             response.set_text("Неизвестное действие, выберите то, что есть")
             response.set_buttons([
                     {'title':'Добавь рецепт', 'hide':True},
                     {'title':'Покажи рецепт', 'hide':True},
                     {'title':'Измени рецепт', 'hide':True},
+                    {'title':'Пересчитай рецепт', 'hide':True},
                     {'title':'Удали рецепт', 'hide':True}])
             return response, user_storage
